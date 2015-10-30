@@ -17,10 +17,11 @@ def mplotApp():
     frame = mplotFrame()
     app.SetTopWindow(frame)
     frame.Show()
-    return app,frame.get_figure()
+    return app
 
 if __name__ == "__main__":
-    app,figure = mplotApp()
+    app = mplotApp()
+    figure = app.GetTopWindow().get_figure()
     # matplotlib script
     import numpy as np
     figure.suptitle("wxmplot")

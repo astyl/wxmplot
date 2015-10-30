@@ -1,4 +1,3 @@
-# -*-coding:Utf-8 -*
 from matplotlib.backend_bases import NavigationToolbar2,cursors
 
 import wx

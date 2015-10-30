@@ -9,6 +9,7 @@ class mPlot(AbcModel):
         "Y": (np.ndarray,"model",np.ndarray(),"var Y"),
         "color": (unicode,"color","blue","artist color"),
         "linestyle":  (unicode,"unicode","-","linestyle"),
+        # and other ...
     })        
         
         
