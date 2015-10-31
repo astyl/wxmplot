@@ -15,9 +15,9 @@ class AbcModel(object):
             getterFn = self.__createGetter(name,vtype,desc)
             
             self.__properties[name] = propertyInfo 
-            setterFn(defaultValue)
             setattr(self,"set_"+name,setterFn)
             setattr(self,"get_"+name,getterFn)
+            setterFn(defaultValue)
         
         self.update(**k)
 

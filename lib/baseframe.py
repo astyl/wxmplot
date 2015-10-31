@@ -74,7 +74,13 @@ class BaseFrame(wx.Frame):
         # ShellCtrl
         self._shellDialog = ShellDialog(self,size=(400,300),title="shell")
         self.update_shell_locals()
-        
+    
+    def get_panel(self,panelId = None):
+        """ return a base panel """
+        if panelId is None:
+            panelId = self.panelIds[0]
+        return self.panels[panelId]
+                    
     def get_canvas(self,panelId = None):
         """ return the matplotlib canvas of the panel """
         if panelId is None:
@@ -99,6 +105,15 @@ class BaseFrame(wx.Frame):
         }
         return shellLocals
         
+    def build_figure(self, panelId = None):
+        """ build a figure on the panel """
+        if panelId is None:
+            panelIds = [self.panelIds[0]]
+        else:
+            panelIds = self.panelIds
+        for panelId in panelIds:
+            self.panels[panelId].build_figure()
+
     def draw(self, panelId = None):
         """ draw on the panel """
         if panelId is None:
@@ -135,14 +150,35 @@ if __name__ == "__main__":
     app = wx.App()
     fr = BaseFrame(None)
 
-    # matplotlib scripting
+#     # matplotlib scripting
+#     import numpy as np
+#     fig = fr.get_figure()
+#     axes = fig.add_subplot(111)
+#     t = np.arange(0,10,0.1)
+#     axes.plot(t,)
+#     # end
+    panel = fr.get_panel()
     import numpy as np
-    fig = fr.get_figure()
-    axes = fig.add_subplot(111)
-    t = np.arange(0,10,0.1)
-    axes.plot(t,np.sin(t)/(1+t**2))
-    # end
+    from figuremodels.mfigure import mFigure
+    from figuremodels.maxes import mAxes
+    from figuremodels.mplot import mPlot
+    mf = mFigure()
+    ma = mAxes()
+    mp1= mPlot()
+    mp2= mPlot()
+    
+    X = np.arange(0,10,0.1)
+    Y1= np.sin(X)/(1+X**2)
+    Y2= np.cos(X)/(1+X**2)
+    mp1.update(name="mp1",X=X,Y=Y1,color="red",linestyle="--")
+    mp2.update(name="mp2",X=X,Y=Y2,color="blue")
+    ma.update(name="ma",xlabel="t",ylabel="y1",mplot=[mp1,mp2])
+    mf.update(name="mf",facecolor="grey",maxes=[ma])
+    fr.get_panel().set_mfigure(mf)
     fr.Show()
+
+    fr.build_figure()
+    fr.draw()
     app.MainLoop()       
 
 

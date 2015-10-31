@@ -1,12 +1,11 @@
 import wx
 import matplotlib
-from matplotlib.lines import Line2D
 from navigation import Navigation
 matplotlib.use('WXAgg')
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from matplotlib.figure import Figure
 from logger import LogClass
-
+from figurefactories.figurefactory import factor_figure
 
 class BasePanel(wx.Panel,LogClass):
     """
@@ -26,16 +25,20 @@ class BasePanel(wx.Panel,LogClass):
         wx.Panel arguments
         """ 
         wx.Panel.__init__(self,*args,**kwargs)
-        
         # figure matplotlib
         self.__figure = Figure()
         # canvas matplotlib and wxpanel
         self.__canvas = FigureCanvasWxAgg(self, -1, self.__figure)
         # navigation (zoom/unzoom)
         self.__navigation = Navigation(self.__canvas,self.nav_mode,self.nav_messenger)
+        # figure model
+        self.__mfigure = None
         # panel fit
         self._layout()
     
+    def build_figure(self):
+        factor_figure(self.__figure,self.__mfigure)
+
     def draw(self):
         self.__canvas.draw()
 
@@ -44,6 +47,12 @@ class BasePanel(wx.Panel,LogClass):
     
     def get_canvas(self):
         return self.__canvas
+    
+    def get_mfigure(self):
+        return self.__mfigure
+    
+    def set_mfigure(self,mfigure):
+        self.__mfigure = mfigure
     
     def print_figure(self, filename, dpi=None, facecolor='w', edgecolor='w',
                      orientation='portrait', format=None, **kwargs):
