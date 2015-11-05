@@ -1,6 +1,6 @@
 
 import wx
-
+ 
 # Plot Panel
 from basepanel import BasePanel
 def mplotPanel(parent):
